@@ -67,6 +67,8 @@ const Document = withEmotionCache(({ children, title, themeName: propThemeName }
   const clientStyleData = useContext(ClientStyleContext);
   const loaderData = useLoaderData<RootLoaderData>();
 
+  // not using useTheme yet, to use loaderData.
+  // maybe we could access it from useTheme using useMatchesData("root")?
   let themeName: ThemeNames = useMemo(() => {
     return (
       propThemeName ||
