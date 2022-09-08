@@ -1,13 +1,11 @@
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
+import { NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
+import { Box, Button, Paper } from "@mui/material";
+import { getNoteListItems } from "~/services/note.server";
 import { requireUserId } from "~/services/session.server";
 import { useUser } from "~/utils/routing";
-import { getNoteListItems } from "~/services/note.server";
-import Paper from "@mui/material/Paper";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await requireUserId(request);

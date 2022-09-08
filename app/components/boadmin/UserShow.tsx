@@ -8,6 +8,9 @@ export default function UserShow() {
       <SimpleShowLayout>
         <TextField source="id" />
         <EmailField source="email" />
+        <TextField source="firstName" />
+        <TextField source="lastName" />
+
         <DateField source="createdAt" />
         <DateField source="updatedAt" />
       </SimpleShowLayout>

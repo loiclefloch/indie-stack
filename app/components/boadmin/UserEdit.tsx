@@ -8,6 +8,8 @@ export default function UserEdit() {
       <SimpleForm>
         <TextInput  source="id" disabled validate={required()} fullWidth />
         <TextInput source="email" type="email" validate={required()} fullWidth/>
+        <TextInput source="firstName" type="text" validate={required()} fullWidth/>
+        <TextInput source="lastName" type="text" validate={required()} fullWidth/>
         <DateInput source="createdAt" label="createdAt" disabled validate={required()} fullWidth/>
         <DateInput source="updatedAt" label="updatedAt" disabled validate={required()} fullWidth/>
       </SimpleForm>

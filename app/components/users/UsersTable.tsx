@@ -21,6 +21,7 @@ export default function UsersTable({ users }: Props) {
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>email</TableCell>
+            <TableCell>Name</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -35,6 +36,7 @@ export default function UsersTable({ users }: Props) {
                 </Link>
               </TableCell>
               <TableCell>{user.email}</TableCell>
+              <TableCell>{user.firstName} {user.lastName}</TableCell>
             </TableRow>
           ))}
         </TableBody>

@@ -1,9 +1,14 @@
-import type { Password, User } from "@prisma/client";
+import type { Password } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 import { prisma } from "~/db.server";
 
-export type { User } from "@prisma/client";
+import type { User as PrismaUser } from "@prisma/client";
+
+export type User = PrismaUser & {
+  firstName: string;
+  lastName: string;
+}
 
 export async function getUsers() {
   return prisma.user.findMany()
@@ -28,6 +33,17 @@ export async function createUser(email: User["email"], password: string) {
           hash: hashedPassword,
         },
       },
+    },
+  });
+}
+
+export function updateUser(userId: string, formData: FormData) {
+  return prisma.user.update({
+    where: { id: userId },
+    data: {
+      email: formData.get('email'),
+      firstName: formData.get('firstName'),
+      lastName: formData.get('lastName'),
     },
   });
 }

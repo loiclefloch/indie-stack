@@ -32,8 +32,6 @@ const SubMenu = (props: Props) => {
     handleToggle();
   };
 
-  console.log({ sidebarIsOpen })
-
   const header = (
     <MenuItem
       icon={isOpen ? <ExpandMore /> : icon}

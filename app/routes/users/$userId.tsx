@@ -1,6 +1,6 @@
 import * as React from "react";
 import type {
-  LoaderFunction,
+  LoaderFunction, MetaFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { getUserById } from "~/services/user.server";
@@ -17,11 +17,19 @@ export const loader: LoaderFunction = async ({ params }) => {
   
   if (!user) throw notFound("User not found")
 
-  return json(user);
+  return json({ user });
 };
 
-export default function UserShow() {
-  const user = useLoaderData<typeof loader>();
+export const meta: MetaFunction = ({ data }) => {
+  const { user } = data
+
+  return {
+    title: `${user?.email}`,
+  };
+};
+
+export default function User() {
+  const { user } = useLoaderData<typeof loader>();
 
   return (
     <RouteDrawer redirectTo="/users">
@@ -30,7 +38,7 @@ export default function UserShow() {
       {!user && <Typography component="p">User not found</Typography>}
 
       <Typography component="p">
-        {user.id} {user.email}
+        {user.email} {user.firstName} {user.lastName}
       </Typography>
     </RouteDrawer>
   );

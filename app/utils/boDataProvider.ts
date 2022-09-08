@@ -2,6 +2,16 @@
 import { stringify } from 'query-string';
 import { fetchUtils, DataProvider } from 'ra-core';
 
+function toFormData(item: any) {
+  const formData = new FormData();
+
+  for (var key in item) {
+    formData.append(key, item[key]);
+  }
+
+  return formData
+}
+
 /**
  * Maps react-admin queries to a simple REST API
  *
@@ -138,9 +148,13 @@ export default (
     },
 
     update: (resource, params) =>
+        // httpClient(`${apiUrl}/${resource}/${params.id}`, {
+        //     method: 'PUT',
+        //     body: JSON.stringify(params.data),
+        // }).then(({ json }) => ({ data: json })),
         httpClient(`${apiUrl}/${resource}/${params.id}`, {
             method: 'PUT',
-            body: JSON.stringify(params.data),
+            body: toFormData(params.data),
         }).then(({ json }) => ({ data: json })),
 
     // simple-rest doesn't handle provide an updateMany route, so we fallback to calling update n times instead

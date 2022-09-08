@@ -10,7 +10,7 @@ import FormErrorHelperText from "~/components/form/FormErrorHelperText";
 import { Container, Box, Button, TextField, Paper } from "@mui/material";
 import { AuthenticityTokenInput } from "~/components/csrf";
 import { verifyAuthenticityToken } from "~/utils/csrf.server";
-import { logger } from '~/services/logger';
+// import { logger } from '~/services/logger';
 
 export async function loader({ request }: LoaderArgs) {
   
@@ -23,7 +23,7 @@ export async function action({ request }: ActionArgs) {
   const session = await getSession(request);
   const formData = await request.formData();
 
-  logger.info('onAction: ' + session.get('csrf'))
+  // logger.info('onAction: ' + session.get('csrf'))
 
   // TODO:
   // await verifyAuthenticityToken(formData, session);

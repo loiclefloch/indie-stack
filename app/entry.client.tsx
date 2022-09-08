@@ -2,7 +2,7 @@
 import { RemixBrowser } from "@remix-run/react";
 import { startTransition, StrictMode, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
-import { CacheProvider, ThemeProvider } from '@emotion/react';
+import { CacheProvider  } from '@emotion/react';
 import { getCookie, getParsedCookie } from "~/utils/theme.client";
 
 import createEmotionCache from './utils/createEmotionCache';
