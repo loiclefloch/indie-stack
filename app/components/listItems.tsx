@@ -51,6 +51,14 @@ export const mainListItems = (
       <ListItemText primary="Admin" />
     </ListItemButton>
 
+    
+    <ListItemButton href="/boadmin">
+      <ListItemIcon>
+        <AdminPanelSettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Admin BO" />
+    </ListItemButton>
+
   </React.Fragment>
 );
 
