@@ -9,8 +9,10 @@ import jsonServerProvider from "ra-data-json-server";
 
 import Layout from "~/components/reactadmin/layout/Layout";
 import useTheme from "~/hooks/useTheme"
+import { requireUser } from "~/services/session.server";
 
 export async function loader({ request }: LoaderArgs) {
+  await requireUser(request)
   return json({});
 }
 

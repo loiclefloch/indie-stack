@@ -3,28 +3,31 @@
 import type { LoaderArgs } from "@remix-run/node";
 import { json } from "@remix-run/node";
 
-import { Admin, Resource  } from "react-admin";
+import { Admin, Resource } from "react-admin";
 
-import boDataProvider from "~/utils/boDataProvider"
+import boDataProvider from "~/utils/boDataProvider";
 
-import UsersList from "~/components/boadmin/UsersList"
-import UserEdit from "~/components/boadmin/UserEdit"
-import UserShow from "~/components/boadmin/UserShow"
-import Layout from "~/components/reactadmin/layout/Layout";
+import UserEdit from "~/components/boadmin/UserEdit";
+import UserShow from "~/components/boadmin/UserShow";
+import UsersList from "~/components/boadmin/UsersList";
 import BoAdminMenu from "~/components/reactadmin/layout/BoAdminMenu";
-import useTheme from "~/hooks/useTheme"
+import Layout from "~/components/reactadmin/layout/Layout";
+import useTheme from "~/hooks/useTheme";
+import { requireUser } from "~/services/session.server";
 
 export async function loader({ request }: LoaderArgs) {
+  await requireUser(request);
+
   return json({});
 }
 
 export default function AdminPage() {
-  const theme = useTheme()
-  
+  const theme = useTheme();
+
   return (
     <>
       <Admin
-      	theme={theme}
+        theme={theme}
         menu={BoAdminMenu}
         basename="/boadmin"
         dataProvider={boDataProvider("/api")}

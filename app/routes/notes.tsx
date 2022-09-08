@@ -2,9 +2,9 @@ import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
-import { requireUserId } from "~/session.server";
+import { requireUserId } from "~/services/session.server";
 import { useUser } from "~/utils/utils";
-import { getNoteListItems } from "~/models/note.server";
+import { getNoteListItems } from "~/services/note.server";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";

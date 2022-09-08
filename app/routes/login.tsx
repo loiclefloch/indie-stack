@@ -3,9 +3,9 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
-import { createUserSession, getUserId } from "~/session.server";
-import { verifyLogin } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils/utils";
+import { createUserSession, getUserId } from "~/services/session.server";
+import { verifyLogin, validateUserEmail } from "~/services/user.server";
+import { safeRedirect } from "~/utils/routing";
 import FormErrorHelperText from "~/components/form/FormErrorHelperText";
 import { Container, Box, Button, TextField, Paper } from "@mui/material";
 
@@ -22,7 +22,7 @@ export async function action({ request }: ActionArgs) {
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
   const remember = formData.get("remember");
 
-  if (!validateEmail(email)) {
+  if (!validateUserEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
       { status: 400 }

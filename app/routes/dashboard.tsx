@@ -3,7 +3,7 @@ import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { prisma } from "~/db.server";
 import { json, redirect } from "@remix-run/node";
 
-import { requireUser } from "~/session.server";
+import { requireUser } from "~/services/session.server";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";

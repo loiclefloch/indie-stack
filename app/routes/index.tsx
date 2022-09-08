@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 import { json, LoaderArgs, MetaFunction, redirect } from "@remix-run/node";
-import { requireUser } from "~/session.server";
+import { requireUser } from "~/services/session.server";
 
 
 // nothing yet on index redirect:

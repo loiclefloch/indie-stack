@@ -64,3 +64,7 @@ export async function verifyLogin(
 
   return userWithoutPassword;
 }
+
+export function validateUserEmail(email: unknown): email is string {
+  return typeof email === "string" && email.length > 5 && email.includes("@");
+}

@@ -13,7 +13,7 @@ import {
   useCatch,
 } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
-import { getUser } from "./session.server";
+import { getUser } from "./services/session.server";
 import { ThemeProvider, withEmotionCache } from '@emotion/react';
 import Layout from '~/components/layout/Layout';
 import { getUserTheme, themeCookie } from './utils/theme.server';

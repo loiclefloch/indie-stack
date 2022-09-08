@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { User } from "~/models/user.server";
+import type { User } from "~/services/user.server";
 import Link from '@mui/material/Link';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';

@@ -3,10 +3,10 @@ import { json, redirect } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import * as React from "react";
 
-import { getUserId, createUserSession } from "~/session.server";
+import { getUserId, createUserSession } from "~/services/session.server";
 
-import { createUser, getUserByEmail } from "~/models/user.server";
-import { safeRedirect, validateEmail } from "~/utils/utils";
+import { createUser, getUserByEmail, validateUserEmail } from "~/services/user.server";
+import { safeRedirect } from "~/utils/routing";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -20,7 +20,7 @@ export async function action({ request }: ActionArgs) {
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/");
 
-  if (!validateEmail(email)) {
+  if (!validateUserEmail(email)) {
     return json(
       { errors: { email: "Email is invalid", password: null } },
       { status: 400 }

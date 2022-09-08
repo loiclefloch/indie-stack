@@ -3,7 +3,7 @@ import type {
   LoaderFunction,
 } from "@remix-run/node";
 import { json } from "@remix-run/node";
-import { getUserById } from "~/models/user.server";
+import { getUserById } from "~/services/user.server";
 import { useLoaderData } from "@remix-run/react";
 import { Container, Typography } from "@mui/material";
 import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/layout/RouteDrawer";

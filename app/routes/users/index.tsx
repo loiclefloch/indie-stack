@@ -1,9 +1,9 @@
 import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
-import { requireUser } from "~/session.server";
+import { requireUser } from "~/services/session.server";
 import PageContainer from "~/components/layout/PageContainer";
-import { getUsers } from "~/models/user.server";
+import { getUsers } from "~/services/user.server";
 import UsersTable from "~/components/users/UsersTable";
 
 
