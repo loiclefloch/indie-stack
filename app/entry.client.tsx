@@ -5,7 +5,7 @@ import { hydrateRoot } from "react-dom/client";
 import { CacheProvider, ThemeProvider } from '@emotion/react';
 import { getCookie, getParsedCookie } from "~/utils/theme.client";
 
-import createEmotionCache from './src/createEmotionCache';
+import createEmotionCache from './utils/createEmotionCache';
 import { DEFAULT_THEME } from "~/constants";
 import type { ThemeNames } from "~/themes";
 import ClientStyleContext from "./context/ClientStyleContext";

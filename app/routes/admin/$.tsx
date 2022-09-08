@@ -7,6 +7,9 @@ import { Link } from "@remix-run/react";
 import { Admin, Resource, ListGuesser } from "react-admin";
 import jsonServerProvider from "ra-data-json-server";
 
+import Layout from "~/components/reactadmin/layout/Layout";
+import useTheme from "~/hooks/useTheme"
+
 export async function loader({ request }: LoaderArgs) {
   return json({});
 }
@@ -14,9 +17,11 @@ export async function loader({ request }: LoaderArgs) {
 const dataProvider = jsonServerProvider("https://jsonplaceholder.typicode.com");
 
 export default function AdminPage() {
+  const theme = useTheme()
+
   return (
     <>
-      <Admin basename="/admin" dataProvider={dataProvider}>
+      <Admin basename="/admin" dataProvider={dataProvider} layout={Layout} theme={theme}>
         <Resource name="posts" list={ListGuesser} />
         <Resource name="comments" list={ListGuesser} />
         <Resource name="users" list={ListGuesser} />

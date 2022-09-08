@@ -6,11 +6,8 @@ import { useEffect, useRef } from "react";
 import { createUserSession, getUserId } from "~/session.server";
 import { verifyLogin } from "~/models/user.server";
 import { safeRedirect, validateEmail } from "~/utils";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import Box from "@mui/material/Box";
-import Container from "@mui/material/Container";
-import FormErrorHelperText  from '~/components/FormErrorHelperText'
+import FormErrorHelperText from "~/components/form/FormErrorHelperText";
+import { Container, Box, Button, TextField, Paper } from "@mui/material";
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -87,41 +84,37 @@ export default function LoginPage() {
   return (
     <Form method="post">
       <Box sx={{ marginTop: 8 }}>
-        <Container maxWidth="xs" sx={{ background: "white", padding: 6 }}>
-          <input type="hidden" name="redirectTo" value={redirectTo} />
+        <Container maxWidth="xs">
+          <Paper sx={{ padding: 6 }}>
+            <input type="hidden" name="redirectTo" value={redirectTo} />
 
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
-            <TextField
-              name="email"
-              label="Email"
-              variant="standard"
-              margin="normal"
-              type="email"
-              focused
-            />
-            <FormErrorHelperText
-              name="email"
-              actionData={actionData}
-            />
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <TextField
+                name="email"
+                label="Email"
+                variant="standard"
+                margin="normal"
+                type="email"
+                focused
+              />
+              <FormErrorHelperText name="email" actionData={actionData} />
 
-            <TextField
-              name="password"
-              label="Password"
-              variant="standard"
-              margin="normal"
-              type="password"
-            />
-            <FormErrorHelperText
-              name="password"
-              actionData={actionData}
-            />
-          </Box>
+              <TextField
+                name="password"
+                label="Password"
+                variant="standard"
+                margin="normal"
+                type="password"
+              />
+              <FormErrorHelperText name="password" actionData={actionData} />
+            </Box>
 
-          <Box sx={{ marginTop: 2, display: "flex", justifyContent: "end" }}>
-            <Button type="submit" variant="outlined" color="primary">
-              Log in
-            </Button>
-          </Box>
+            <Box sx={{ marginTop: 2, display: "flex", justifyContent: "end" }}>
+              <Button type="submit" variant="outlined" color="primary">
+                Log in
+              </Button>
+            </Box>
+          </Paper>
         </Container>
       </Box>
     </Form>

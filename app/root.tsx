@@ -15,7 +15,7 @@ import {
 import { useLoaderData } from "@remix-run/react";
 import { getUser } from "./session.server";
 import { ThemeProvider, withEmotionCache } from '@emotion/react';
-import Layout from './src/Layout';
+import Layout from '~/components/layout/Layout';
 import { getUserTheme, themeCookie } from './utils/theme.server';
 import { getTheme, ThemeNames } from './themes';
 import ClientStyleContext from "~/context/ClientStyleContext";

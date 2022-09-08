@@ -16,6 +16,8 @@ export default function Index() {
 	// Get location to provide redirect back url
 	const location = useLocation();
 
+	// console.log({ theme })
+
 	return (
 		<Box
 			sx={{

@@ -2,15 +2,15 @@ import type { LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import { requireUser } from "~/session.server";
-import PageContainer from "~/components/PageContainer";
+import PageContainer from "~/components/layout/PageContainer";
 import { getUsers } from "~/models/user.server";
-import type { User } from "~/models/user.server";
-import Link from '@mui/material/Link';
+import UsersTable from "~/components/users/UsersTable";
+
 
 export async function loader({ request }: LoaderArgs) {
   await requireUser(request);
 
-  const users = await getUsers(request);
+  const users = await getUsers();
 
   return json({
     users
@@ -26,13 +26,7 @@ export const meta: MetaFunction = () => {
 function DashboardContent({ users } : { users: any }) {
   return (
     <>
-      {users.map((user : User) => (
-        <div key={user.id}>
-          <Link href={`/users/${user.id}/show`}>
-            {user.id} {user.email}
-          </Link>
-        </div>
-      ))}
+    	<UsersTable users={users} />
     </>
   );
 }

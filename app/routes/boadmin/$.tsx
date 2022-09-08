@@ -10,7 +10,8 @@ import boDataProvider from "~/utils/boDataProvider"
 import UsersList from "~/components/boadmin/UsersList"
 import UserEdit from "~/components/boadmin/UserEdit"
 import UserShow from "~/components/boadmin/UserShow"
-import BoAdminLayout from "~/components/boadmin/BoAdminLayout";
+import Layout from "~/components/reactadmin/layout/Layout";
+import BoAdminMenu from "~/components/reactadmin/layout/BoAdminMenu";
 import useTheme from "~/hooks/useTheme"
 
 export async function loader({ request }: LoaderArgs) {
@@ -24,9 +25,10 @@ export default function AdminPage() {
     <>
       <Admin
       	theme={theme}
+        menu={BoAdminMenu}
         basename="/boadmin"
         dataProvider={boDataProvider("/api")}
-        layout={BoAdminLayout}
+        layout={Layout}
         title="Admin 2"
       >
         <Resource

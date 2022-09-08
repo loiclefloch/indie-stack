@@ -1,12 +1,10 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation } from 'react-router-dom';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -15,10 +13,10 @@ import { styled } from '@mui/material/styles';
 import MuiToolbar, { ToolbarProps as MuiToolbarProps } from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { ReactNode, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import ClientOnly from '~/utils/ClientOnly';
-import { mainListItems, secondaryListItems, bottomListItems } from './listItems';
-
-const drawerWidth: number = 240;
+import { bottomListItems, mainListItems, secondaryListItems } from './listItems';
+import { DRAWER_WIDTH } from "~/constants"
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -34,8 +32,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: withDrawer ? drawerWidth : 0,
-    width: withDrawer ? `calc(100% - ${drawerWidth}px)` : '100%',
+    marginLeft: withDrawer ? DRAWER_WIDTH : 0,
+    width: withDrawer ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -55,7 +53,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     '& .MuiDrawer-paper': {
       position: 'relative',
       whiteSpace: 'nowrap',
-      width: drawerWidth,
+      width: DRAWER_WIDTH,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -121,6 +119,8 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
             sx={{ flexGrow: 1 }}
           >
             <ClientOnly fallback="">{() => window.document?.title}</ClientOnly>
+            {/* only when on a react admin page, will replace the title for us */}
+            <span id="react-admin-title" />
           </Typography>
 
           <List dense sx={{ padding: 0 }}>

@@ -7,7 +7,7 @@ import { Response } from "@remix-run/node";
 import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
-import createEmotionCache from './src/createEmotionCache';
+import createEmotionCache from './utils/createEmotionCache';
 import theme from './themes/toRemove';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';

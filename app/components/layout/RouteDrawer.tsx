@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { Box, Container, Drawer, Typography } from "@mui/material";
 import { useNavigate } from "@remix-run/react";
 import { useCatch } from "@remix-run/react";
-import WarningBlock from "./WarningBlock";
+import WarningBlock from "../WarningBlock";
 
 type RouteDrawerCatchBoundaryProps = {
 	/**

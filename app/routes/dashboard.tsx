@@ -7,12 +7,12 @@ import { requireUser } from "~/session.server";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import PageContainer from "~/components/PageContainer";
+import PageContainer from "~/components/layout/PageContainer";
 import Chart from "~/components/dashboard/Chart";
 import Deposits from "~/components/dashboard/Deposits";
 import Orders from "~/components/dashboard/Orders";
 import Crash from "~/components/dashboard/Crash";
-import ErrorBoundary from "~/components/ErrorBoundary"
+import ErrorBoundary from "~/components/layout/ErrorBoundary"
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request);

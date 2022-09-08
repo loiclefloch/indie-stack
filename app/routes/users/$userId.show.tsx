@@ -6,7 +6,7 @@ import { json } from "@remix-run/node";
 import { getUserById } from "~/models/user.server";
 import { useLoaderData } from "@remix-run/react";
 import { Container, Typography } from "@mui/material";
-import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/RouteDrawer";
+import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/layout/RouteDrawer";
 import { notFoundResponse } from "~/utils/response";
 
 export const loader: LoaderFunction = async ({ params }) => {
