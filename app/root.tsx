@@ -22,16 +22,12 @@ import ClientStyleContext from "~/contexts/ClientStyleContext";
 import { DEFAULT_THEME } from './constants';
 import useEnhancedEffect from './hooks/useEnhancedEffect';
 import { CssBaseline, Typography, Link as MuiLink } from '@mui/material';
+import { User } from './models/user.server';
 
-export const links: LinksFunction = () => {
-  return [];
-};
-
-export const meta: MetaFunction = () => ({
-  charset: "utf-8",
-  title: "",
-  viewport: "width=device-width,initial-scale=1",
-});
+type RootLoaderData = {
+  user: User;
+  themeName: ThemeNames;
+}
 
 export async function loader({ request }: LoaderArgs) {
   return json({
@@ -58,6 +54,17 @@ export async function loader({ request }: LoaderArgs) {
   });
 };
 
+export const links: LinksFunction = () => {
+  return [];
+};
+
+export const meta: MetaFunction = () => ({
+  charset: "utf-8",
+  title: "",
+  viewport: "width=device-width,initial-scale=1",
+});
+
+
 type DocumentProps = {
   children: React.ReactNode;
   title?: string;
@@ -69,7 +76,7 @@ const Document = withEmotionCache(({ children, title, themeName: propThemeName }
 
   // not using useTheme yet, to use loaderData.
   // maybe we could access it from useTheme using useMatchesData("root")?
-  let themeName: ThemeNames = useMemo(() => {
+  const themeName: ThemeNames = useMemo(() => {
     return (
       propThemeName ||
       loaderData?.themeName ||
@@ -152,7 +159,7 @@ export default function App() {
   );
 }
 
-function parse(error) {
+function parse(error: Error) {
   try {
     return JSON.parse(error.message)
   } catch (e) {}

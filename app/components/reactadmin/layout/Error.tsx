@@ -3,14 +3,19 @@ import { useRef, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import ErrorIcon from '@mui/icons-material/Report';
 import History from '@mui/icons-material/History';
-import { Title, useTranslate } from 'react-admin';
+import { Title, useTranslate  } from 'react-admin';
 import { useLocation } from 'react-router';
+
+type PropTypes = {
+	error: any; // TODO: which type?
+	resetErrorBoundary: any;
+}
 
 export default function Error({
 	error, 
 	resetErrorBoundary, 
 	...rest
-}) {
+} : PropTypes) {
 	const { pathname } = useLocation();
 	const originalPathname = useRef(pathname);
 
@@ -28,10 +33,10 @@ export default function Error({
 			<h1><ErrorIcon /> Something Went Wrong </h1>
 			<div>A client error occurred and your request couldn't be completed.</div>
 			{process.env.NODE_ENV !== 'production' && (
-				<details>
+				<div>
 					<h2>{translate(error.toString())}</h2>
 					{error.componentStack}
-				</details>
+				</div>
 			)}
 			<div>
 				<Button
