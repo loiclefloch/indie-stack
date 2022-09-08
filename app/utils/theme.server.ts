@@ -2,7 +2,7 @@ import { createCookie } from "@remix-run/node"; // or cloudflare/deno
 
 import { DEFAULT_THEME } from "~/constants";
 
-import type { ThemeNames } from "~/themes";
+import type { ThemeNames } from "~/constants";
 
 // Create theme cookie
 export const themeCookie = createCookie("theme", {

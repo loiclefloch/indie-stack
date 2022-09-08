@@ -3,7 +3,7 @@ import lightTheme from "~/themes/light";
 import { DEFAULT_THEME } from "~/constants";
 import { Theme, ThemeOptions } from '@mui/material/styles';
 
-export type ThemeNames = "dark" | "light";
+import type { ThemeNames } from "~/constants";
 
 const themes: Record<ThemeNames, Theme> = {
   dark: darkTheme,

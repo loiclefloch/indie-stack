@@ -3,7 +3,7 @@ import { json } from "@remix-run/node";
 import { Form, Link, NavLink, Outlet, useLoaderData } from "@remix-run/react";
 
 import { requireUserId } from "~/services/session.server";
-import { useUser } from "~/utils/utils";
+import { useUser } from "~/utils/routing";
 import { getNoteListItems } from "~/services/note.server";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";

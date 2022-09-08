@@ -1,7 +1,6 @@
 // based on https://github.com/mui/material-ui/blob/master/examples/remix-with-typescript/app/root.tsx
 import { useContext, useMemo } from 'react';
 import { ActionFunction, LinksFunction, LoaderArgs, MetaFunction, redirect } from "@remix-run/node";
-import { json } from "@remix-run/node";
 import {
   Link as RmxLink,
   Links,
@@ -13,7 +12,7 @@ import {
   useCatch,
 } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
-import { getUser } from "./services/session.server";
+import { commitSession, getSession, getUser } from "./services/session.server";
 import { ThemeProvider, withEmotionCache } from '@emotion/react';
 import Layout from '~/components/layout/Layout';
 import { getUserTheme, themeCookie } from './utils/theme.server';
@@ -22,18 +21,34 @@ import ClientStyleContext from "~/contexts/ClientStyleContext";
 import { DEFAULT_THEME } from './constants';
 import useEnhancedEffect from './hooks/useEnhancedEffect';
 import { CssBaseline, Typography, Link as MuiLink } from '@mui/material';
-import { User } from './models/user.server';
+import type { User } from '~/services/user.server';
+import { AuthenticityTokenProvider } from "~/components/csrf"
+import { createAuthenticityToken } from './utils/csrf.server';
+import { json } from "@remix-run/node";
 
 type RootLoaderData = {
-  user: User;
+  user: User | null;
   themeName: ThemeNames;
+  csrf: string;
 }
 
 export async function loader({ request }: LoaderArgs) {
-  return json({
-    user: await getUser(request),
-    themeName: await getUserTheme(request),
-  });
+  const session = await getSession(request);
+  const token = createAuthenticityToken(session);
+
+  console.log({
+    token,
+    session: session.get('csrf')
+  })
+
+  return json<RootLoaderData>(
+    { 
+      csrf: token, // https://github.com/sergiodxa/remix-utils
+      user: await getUser(request),
+      themeName: await getUserTheme(request),
+    },
+    { headers: { "Set-Cookie": await commitSession(session) } }
+  );
 }
 
 /**
@@ -70,20 +85,19 @@ type DocumentProps = {
   title?: string;
   themeName?: ThemeNames;
 };
-const Document = withEmotionCache(({ children, title, themeName: propThemeName }: DocumentProps, emotionCache) => {
+const Document = withEmotionCache(({ children, title, themeName: propThemeName, themeName: loaderDataThemeName }: DocumentProps, emotionCache) => {
   const clientStyleData = useContext(ClientStyleContext);
-  const loaderData = useLoaderData<RootLoaderData>();
 
   // not using useTheme yet, to use loaderData.
-  // maybe we could access it from useTheme using useMatchesData("root")?
+  // maybe we could access it from useTheme using useRouteData("root")?
   const themeName: ThemeNames = useMemo(() => {
     return (
       propThemeName ||
-      loaderData?.themeName ||
+      loaderDataThemeName ||
       clientStyleData.themeName ||
       DEFAULT_THEME
     );
-  }, [loaderData, clientStyleData, propThemeName]);
+  }, [loaderDataThemeName, clientStyleData, propThemeName]);
 
   const theme = getTheme(themeName);
 
@@ -132,13 +146,12 @@ const Document = withEmotionCache(({ children, title, themeName: propThemeName }
         />
       </head>
       <body>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          {children}
-        </ThemeProvider>
-        <ScrollRestoration />
-        <Scripts />
-
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {children}
+          </ThemeProvider>
+          <ScrollRestoration />
+          <Scripts />
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
@@ -148,14 +161,19 @@ const Document = withEmotionCache(({ children, title, themeName: propThemeName }
 // https://remix.run/api/conventions#default-export
 // https://remix.run/api/conventions#route-filenames
 export default function App() {
-  const data = useLoaderData();
+  const { csrf, user, themeName } = useLoaderData<typeof loader>();
+
+  console.log({ csrf })
+
 
   return (
-    <Document>
-      <Layout isLoggedIn={!!data.user}>
-        <Outlet />
-      </Layout>
-    </Document>
+    <AuthenticityTokenProvider token={csrf}>
+      <Document themeName={themeName}>
+        <Layout isLoggedIn={!!user}>
+          <Outlet />
+        </Layout>
+      </Document>
+    </AuthenticityTokenProvider>
   );
 }
 

@@ -5,17 +5,17 @@ import type {
 import { json } from "@remix-run/node";
 import { getUserById } from "~/services/user.server";
 import { useLoaderData } from "@remix-run/react";
-import { Container, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/layout/RouteDrawer";
-import { notFoundResponse } from "~/utils/response";
+import { notFound } from "~/utils/responses";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const userId = params.userId;
-  if (!userId) return notFoundResponse("User not found")
+  if (!userId) throw notFound("User not found")
 
   const user = await getUserById(userId as string);
   
-  if (!user) return notFoundResponse("User not found")
+  if (!user) throw notFound("User not found")
 
   return json(user);
 };

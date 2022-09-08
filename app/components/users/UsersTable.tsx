@@ -30,7 +30,7 @@ export default function UsersTable({ users }: Props) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <Link href={`/users/${user.id}/show`}>
+                <Link href={`/users/${user.id}`}>
                   {user.id}
                 </Link>
               </TableCell>

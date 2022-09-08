@@ -1,4 +1,4 @@
-import type { ThemeNames } from "~/themes";
+export type ThemeNames = "dark" | "light";
 
 export const DEFAULT_THEME: ThemeNames = "dark";
 

@@ -33,7 +33,7 @@ export function safeRedirect(
  * @param {string} id The route id
  * @returns {JSON|undefined} The router data or undefined if not found
  */
-export function useMatchesData(
+export function useRouteData(
   id: string
 ): Record<string, unknown> | undefined {
   const matchingRoutes = useMatches();
@@ -49,7 +49,7 @@ function isUser(user: any): user is User {
 }
 
 export function useOptionalUser(): User | undefined {
-  const data = useMatchesData("root");
+  const data = useRouteData("root");
   if (!data || !isUser(data.user)) {
     return undefined;
   }

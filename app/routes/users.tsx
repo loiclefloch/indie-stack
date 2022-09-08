@@ -37,6 +37,7 @@ export default function Dashboard() {
   return (
     <PageContainer>
       <DashboardContent users={users} />
+
       <Outlet />
     </PageContainer>
   );

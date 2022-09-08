@@ -3,24 +3,35 @@ import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
-import { createUserSession, getUserId } from "~/services/session.server";
+import { createUserSession, getSession, getUserId } from "~/services/session.server";
 import { verifyLogin, validateUserEmail } from "~/services/user.server";
 import { safeRedirect } from "~/utils/routing";
 import FormErrorHelperText from "~/components/form/FormErrorHelperText";
 import { Container, Box, Button, TextField, Paper } from "@mui/material";
+import { AuthenticityTokenInput } from "~/components/csrf";
+import { verifyAuthenticityToken } from "~/utils/csrf.server";
 
 export async function loader({ request }: LoaderArgs) {
+  
   const userId = await getUserId(request);
   if (userId) return redirect("/");
   return json({});
 }
 
 export async function action({ request }: ActionArgs) {
+  const session = await getSession(request);
   const formData = await request.formData();
+
+  console.log('onAction: ' + session.get('csrf'))
+
+  await verifyAuthenticityToken(formData, session);
+
   const email = formData.get("email");
   const password = formData.get("password");
   const redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
   const remember = formData.get("remember");
+
+
 
   if (!validateUserEmail(email)) {
     return json(
@@ -83,6 +94,8 @@ export default function LoginPage() {
 
   return (
     <Form method="post">
+      <AuthenticityTokenInput />
+
       <Box sx={{ marginTop: 8 }}>
         <Container maxWidth="xs">
           <Paper sx={{ padding: 6 }}>

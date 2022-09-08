@@ -2,7 +2,7 @@ import { createContext } from "react";
 
 import { DEFAULT_THEME } from "~/constants";
 
-import type { ThemeNames } from "~/themes";
+import type { ThemeNames } from "~/constants";
 
 export interface ClientStyleContextData {
   reset: () => void;
