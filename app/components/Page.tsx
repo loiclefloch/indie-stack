@@ -1,5 +1,6 @@
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
+import { useLocation } from 'react-router-dom';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
@@ -16,6 +17,7 @@ import MuiToolbar, { ToolbarProps as MuiToolbarProps } from '@mui/material/Toolb
 import Typography from '@mui/material/Typography';
 import { ReactNode, useState } from 'react';
 import { mainListItems, secondaryListItems } from './listItems';
+import ClientOnly from '~/utils/ClientOnly';
 
 const drawerWidth: number = 240;
 
@@ -76,6 +78,8 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, children: ReactNode }) {
+  const location = useLocation();
+
   const [open, setOpen] = useState(true);
 
   const withDrawer = isLoggedIn
@@ -112,19 +116,19 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            Page title
+            <ClientOnly fallback="">{() => window.document?.title}</ClientOnly>
           </Typography>
 
           <List>
             {isLoggedIn && (
               <ListItem disablePadding>
-                <ListItemButton sx={{ textAlign: "center" }} href="/loout">
+                <ListItemButton sx={{ textAlign: "center" }} href="/logout">
                   <ListItemText primary="Logout" />
                 </ListItemButton>
               </ListItem>
             )}
 
-            {!isLoggedIn && (
+            {!isLoggedIn && location.pathname !== '/login' && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }} href="/login">
                   <ListItemText primary="Login" />

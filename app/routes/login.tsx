@@ -1,6 +1,6 @@
 import type { ActionArgs, LoaderArgs, MetaFunction } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
+import { Form, useActionData, useSearchParams } from "@remix-run/react";
 import { useEffect, useRef } from "react";
 
 import { createUserSession, getUserId } from "~/session.server";
@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
+import FormErrorHelperText  from '~/components/FormErrorHelperText'
 
 export async function loader({ request }: LoaderArgs) {
   const userId = await getUserId(request);
@@ -85,21 +86,44 @@ export default function LoginPage() {
 
   return (
     <Form method="post">
-      <Container maxWidth="xs">
-        <input type="hidden" name="redirectTo" value={redirectTo} />
+      <Box sx={{ marginTop: 8 }}>
+        <Container maxWidth="xs" sx={{ background: "white", padding: 6 }}>
+          <input type="hidden" name="redirectTo" value={redirectTo} />
 
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <TextField label="Email" variant="standard" margin="normal" focused />
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <TextField
+              name="email"
+              label="Email"
+              variant="standard"
+              margin="normal"
+              type="email"
+              focused
+            />
+            <FormErrorHelperText
+              name="email"
+              actionData={actionData}
+            />
 
-          <TextField label="Password" variant="standard" margin="normal" />
-        </Box>
+            <TextField
+              name="password"
+              label="Password"
+              variant="standard"
+              margin="normal"
+              type="password"
+            />
+            <FormErrorHelperText
+              name="password"
+              actionData={actionData}
+            />
+          </Box>
 
-        <Box sx={{ marginTop: 2, display: "flex", justifyContent: "end" }}>
-          <Button type="submit" variant="outlined" color="primary">
-            Log in
-          </Button>
-        </Box>
-      </Container>
+          <Box sx={{ marginTop: 2, display: "flex", justifyContent: "end" }}>
+            <Button type="submit" variant="outlined" color="primary">
+              Log in
+            </Button>
+          </Box>
+        </Container>
+      </Box>
     </Form>
   );
 }

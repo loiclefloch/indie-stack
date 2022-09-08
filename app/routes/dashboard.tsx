@@ -1,8 +1,28 @@
+import type { LoaderArgs, MetaFunction } from "@remix-run/node";
+
+import { prisma } from "~/db.server";
+import { json, redirect } from "@remix-run/node";
+
+import { requireUser } from "~/session.server";
+
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import Chart from "~/components/Chart";
 import Deposits from "~/components/Deposits";
 import Orders from "~/components/Orders";
+
+export async function loader({ request }: LoaderArgs) {
+  const user = await requireUser(request);
+  return json({
+    user
+  });
+}
+
+export const meta: MetaFunction = () => {
+  return {
+    title: "Dashboard",
+  };
+};
 
 function DashboardContent() {
   return (

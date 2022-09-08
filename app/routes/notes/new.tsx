@@ -1,3 +1,7 @@
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import FormHelperText from '@mui/material/FormHelperText';
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
@@ -56,31 +60,31 @@ export default function NewNotePage() {
       }}
     >
       <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Title: </span>
-          <input
+          <TextField
+            label="title"
             ref={titleRef}
             name="title"
+            fullWidth
             className="flex-1 rounded-md border-2 border-blue-500 px-3 text-lg leading-loose"
             aria-invalid={actionData?.errors?.title ? true : undefined}
             aria-errormessage={
               actionData?.errors?.title ? "title-error" : undefined
             }
           />
-        </label>
         {actionData?.errors?.title && (
-          <div className="pt-1 text-red-700" id="title-error">
+          <FormHelperText error>
             {actionData.errors.title}
-          </div>
+          </FormHelperText>
         )}
       </div>
 
       <div>
-        <label className="flex w-full flex-col gap-1">
-          <span>Body: </span>
-          <textarea
+          <TextField
             ref={bodyRef}
+            label="Body"
             name="body"
+            fullWidth
+            multiline
             rows={8}
             className="w-full flex-1 rounded-md border-2 border-blue-500 py-2 px-3 text-lg leading-6"
             aria-invalid={actionData?.errors?.body ? true : undefined}
@@ -88,22 +92,21 @@ export default function NewNotePage() {
               actionData?.errors?.body ? "body-error" : undefined
             }
           />
-        </label>
         {actionData?.errors?.body && (
-          <div className="pt-1 text-red-700" id="body-error">
+          <FormHelperText error>
             {actionData.errors.body}
-          </div>
+          </FormHelperText>
         )}
       </div>
 
-      <div className="text-right">
-        <button
+      <Box sx={{ textAlign: 'right' }}>
+        <Button
           type="submit"
-          className="rounded bg-blue-500 py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+          variant="outlined"
         >
           Save
-        </button>
-      </div>
+        </Button>
+      </Box>
     </Form>
   );
 }
