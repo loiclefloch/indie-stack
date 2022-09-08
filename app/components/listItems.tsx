@@ -9,6 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
+import ConstructionIcon from '@mui/icons-material/Construction';
 
 export const mainListItems = (
   <React.Fragment>
@@ -66,6 +67,24 @@ export const secondaryListItems = (
       </ListItemIcon>
       <ListItemText primary="Admin BO" />
     </ListItemButton>
+
+  </React.Fragment>
+);
+
+export const bottomListItems = (
+  <React.Fragment>
+    <ListSubheader component="div" inset>
+      Dev
+    </ListSubheader>
+    
+    <ListItemButton href="/test" sx={{ flex: 0 }}>
+      <ListItemIcon>
+        <ConstructionIcon />
+      </ListItemIcon>
+      <ListItemText primary="Test Page" />
+    </ListItemButton>
+
+    
 
   </React.Fragment>
 );

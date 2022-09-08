@@ -1,46 +1,41 @@
 import * as React from "react";
 import type {
-  ActionFunction,
   LoaderFunction,
 } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import { json } from "@remix-run/node";
 import { getUserById } from "~/models/user.server";
-import { useLoaderData, useNavigate } from "@remix-run/react";
+import { useLoaderData } from "@remix-run/react";
+import { Container, Typography } from "@mui/material";
+import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/RouteDrawer";
+import { notFoundResponse } from "~/utils/response";
 
 export const loader: LoaderFunction = async ({ params }) => {
   const userId = params.userId;
-  if (!userId) return null;
+  if (!userId) return notFoundResponse("User not found")
 
-  const user = getUserById(userId as string);
+  const user = await getUserById(userId as string);
+  
+  if (!user) return notFoundResponse("User not found")
 
   return json(user);
 };
 
-export const action: ActionFunction = async ({ request }) => {
-  // Here we can update our database with the updated invoice
-
-  // Redirect back to invoice list
-  return redirect("/dashboard");
-};
-
 export default function UserShow() {
-  const navigate = useNavigate();
   const user = useLoaderData<typeof loader>();
 
-  function onClose() {
-    navigate("/users");
-  }
-
-  function onOpen() {
-    navigate("/users");
-  }
-
   return (
-    <SwipeableDrawer anchor="right" open onClose={onClose} onOpen={onOpen}>
+    <RouteDrawer redirectTo="/users">
       <h3>User</h3>
 
-      {user.id} {user.email}
-    </SwipeableDrawer>
+      {!user && <Typography component="p">User not found</Typography>}
+
+      <Typography component="p">
+        {user.id} {user.email}
+      </Typography>
+    </RouteDrawer>
   );
+}
+
+export function CatchBoundary() {
+ return <RouteDrawerCatchBoundary redirectTo="/users" />
 }

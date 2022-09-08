@@ -15,8 +15,8 @@ import { styled } from '@mui/material/styles';
 import MuiToolbar, { ToolbarProps as MuiToolbarProps } from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { ReactNode, useState } from 'react';
-import { mainListItems, secondaryListItems } from './listItems';
 import ClientOnly from '~/utils/ClientOnly';
+import { mainListItems, secondaryListItems, bottomListItems } from './listItems';
 
 const drawerWidth: number = 240;
 
@@ -143,7 +143,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
         </Toolbar>
       </AppBar>
 
-			{/* Sidebar menu */}
+      {/* Sidebar menu */}
       {withSidebar && (
         <Drawer variant="permanent" open={open}>
           <Toolbar
@@ -159,11 +159,17 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
               <ChevronLeftIcon />
             </IconButton>
           </Toolbar>
+
           <Divider />
           <List component="nav">
             {mainListItems}
             <Divider sx={{ my: 1 }} />
             {secondaryListItems}
+          </List>
+
+          <List component="nav" sx={{ display: "flex", flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
+              <Divider />
+              {bottomListItems}
           </List>
         </Drawer>
       )}
