@@ -1,8 +1,9 @@
 // based on https://github.com/mui/material-ui/blob/master/examples/remix-with-typescript/app/root.tsx
-import * as React from 'react';
-import type { LinksFunction, LoaderArgs, MetaFunction } from "@remix-run/node";
+import { useContext, useMemo } from 'react';
+import { ActionFunction, LinksFunction, LoaderArgs, MetaFunction, redirect } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import {
+  Link as RmxLink,
   Links,
   LiveReload,
   Meta,
@@ -13,11 +14,14 @@ import {
 } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { getUser } from "./session.server";
-import { withEmotionCache } from '@emotion/react';
-import { unstable_useEnhancedEffect as useEnhancedEffect } from '@mui/material';
-import theme from './src/theme';
-import ClientStyleContext  from './src/ClientStyleContext';
+import { ThemeProvider, withEmotionCache } from '@emotion/react';
 import Layout from './src/Layout';
+import { getUserTheme, themeCookie } from './utils/theme.server';
+import { getTheme, ThemeNames } from './themes';
+import ClientStyleContext from "~/context/ClientStyleContext";
+import { DEFAULT_THEME } from './constants';
+import useEnhancedEffect from './hooks/useEnhancedEffect';
+import { CssBaseline, Typography, Link as MuiLink } from '@mui/material';
 
 export const links: LinksFunction = () => {
   return [];
@@ -32,11 +36,47 @@ export const meta: MetaFunction = () => ({
 export async function loader({ request }: LoaderArgs) {
   return json({
     user: await getUser(request),
+    themeName: await getUserTheme(request),
   });
 }
 
-const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCache) => {
-  const clientStyleData = React.useContext(ClientStyleContext);
+/**
+ * Toggle theme based on the current theme in the cookie
+ */
+ export const action: ActionFunction = async ({ request }) => {
+  const form = await request.formData();
+  // Get the redirectBack url from the hidden input that was submitted with the form
+  const redirectBack = String(form.get("redirectBack"));
+
+  const currentTheme = await getUserTheme(request);
+  const newTheme: ThemeNames = currentTheme === "dark" ? "light" : "dark";
+
+  return redirect(redirectBack || "/", {
+    headers: {
+      "Set-Cookie": await themeCookie.serialize(newTheme)
+    }
+  });
+};
+
+type DocumentProps = {
+  children: React.ReactNode;
+  title?: string;
+  themeName?: ThemeNames;
+};
+const Document = withEmotionCache(({ children, title, themeName: propThemeName }: DocumentProps, emotionCache) => {
+  const clientStyleData = useContext(ClientStyleContext);
+  const loaderData = useLoaderData<RootLoaderData>();
+
+  let themeName: ThemeNames = useMemo(() => {
+    return (
+      propThemeName ||
+      loaderData?.themeName ||
+      clientStyleData.themeName ||
+      DEFAULT_THEME
+    );
+  }, [loaderData, clientStyleData, propThemeName]);
+
+  const theme = getTheme(themeName);
 
   // Only executed on client
   useEnhancedEffect(() => {
@@ -54,6 +94,11 @@ const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCa
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Only executed on client
+  useEnhancedEffect(() => {
+    // change the theme in style context
+    clientStyleData.setThemeName(themeName);
+  }, [themeName]);
 
   return (
     <html lang="en">
@@ -64,17 +109,28 @@ const Document = withEmotionCache(({ children, title }: DocumentProps, emotionCa
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
+
+        {/* NOTE: Very important meta tag */}
+        {/* because using this, css is re-inserted in entry.server.tsx */}
+        <meta
+          name="emotion-insertion-point"
+          content="emotion-insertion-point"
+        />
+
         <link
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
         />
-        <meta name="emotion-insertion-point" content="emotion-insertion-point" />
       </head>
       <body>
-        {children}
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
         <ScrollRestoration />
         <Scripts />
-        {process.env.NODE_ENV === 'development' && <LiveReload />}
+
+        {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
   );
@@ -96,17 +152,28 @@ export default function App() {
 
 // https://remix.run/docs/en/v1/api/conventions#errorboundary
 export function ErrorBoundary({ error }: { error: Error }) {
+  const errorMessage = JSON.parse(error.message);
+
   console.error(error);
 
   return (
-    <Document title="Error!">
-      <Layout isLoggedIn={false}>
-        <div>
-          <h1>There was an error</h1>
-          <p>{error.message}</p>
-          <hr />
-          <p>Hey, developer, you should replace this with what you want your users to see.</p>
-        </div>
+    <Document title="Error!" themeName={errorMessage.themeName}>
+      <Layout isLoggedIn={errorMessage.isLoggedIn}>
+        <Typography variant="h4" component="h1">
+          Root ErrorBoundary
+        </Typography>
+        <Typography component="pre" variant="inherit">
+          {errorMessage.message || error.message}
+        </Typography>
+        <Typography component="p">The stack trace is:</Typography>
+        <Typography component="pre" variant="inherit">
+          <Typography component="code" variant="inherit">
+            {error.stack}
+          </Typography>
+        </Typography>
+        <MuiLink component={RmxLink} to="/">
+          Go to Home
+        </MuiLink>
       </Layout>
     </Document>
   );
@@ -130,8 +197,8 @@ export function CatchBoundary() {
   }
 
   return (
-    <Document title={`${caught.status} ${caught.statusText}`}>
-      <Layout isLoggedIn={false}>
+    <Document title={`${caught.status} ${caught.statusText}`} themeName={caught.data?.themeName}>
+      <Layout isLoggedIn={caught.data?.isLoggedIn}>
         <h1>
           {caught.status}: {caught.statusText}
         </h1>

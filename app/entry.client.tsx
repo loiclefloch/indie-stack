@@ -1,26 +1,53 @@
+// https://codesandbox.io/s/remix-mui-switch-theme-fixed-latest-mv73cj?file=/app/entry.client.tsx:1202-1221
 import { RemixBrowser } from "@remix-run/react";
-import { startTransition, StrictMode } from "react";
+import { startTransition, StrictMode, useState } from "react";
 import { hydrateRoot } from "react-dom/client";
 import { CacheProvider, ThemeProvider } from '@emotion/react';
-import CssBaseline from '@mui/material/CssBaseline';
+import { getCookie, getParsedCookie } from "~/utils/theme.client";
 
 import createEmotionCache from './src/createEmotionCache';
-import theme from './src/theme';
+import { DEFAULT_THEME } from "~/constants";
+import type { ThemeNames } from "~/themes";
+import ClientStyleContext from "./src/ClientStyleContext";
 
-const emotionCache = createEmotionCache();
+function ClientCacheProvider({ children }: React.PropsWithChildren<{}>) {
+  const [cache, setCache] = useState(createEmotionCache());
+
+  const themeCookie = getCookie("theme");
+  const parsedCookie = getParsedCookie(themeCookie);
+  let defaultThemeName: ThemeNames = DEFAULT_THEME;
+  if (parsedCookie === "dark" || parsedCookie === "light") {
+    defaultThemeName = parsedCookie;
+  }
+
+  const [themeName, setThemeName] = useState<ThemeNames>(defaultThemeName);
+
+  function reset() {
+    setCache(createEmotionCache());
+  }
+
+  return (
+    <ClientStyleContext.Provider value={{ reset, themeName, setThemeName }}>
+      <CacheProvider value={cache}>{children}</CacheProvider>
+    </ClientStyleContext.Provider>
+  );
+}
+
 
 const hydrate = () => {
   startTransition(() => {
     hydrateRoot(
       document,
       <StrictMode>
-        <CacheProvider value={emotionCache}>
-          <ThemeProvider theme={theme}>
-            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-            <CssBaseline />
-            <RemixBrowser />
-          </ThemeProvider>
-        </CacheProvider>
+        <ClientCacheProvider>
+          {/* <CacheProvider value={emotionCache}>
+            <ThemeProvider theme={theme}> */}
+              {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+              {/* <CssBaseline /> */}
+              <RemixBrowser />
+            {/* </ThemeProvider>
+          </CacheProvider> */}
+        </ClientCacheProvider>
       </StrictMode>
     );
   });

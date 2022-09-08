@@ -27,25 +27,25 @@ export default function NotesPage() {
   const user = useUser();
 
   return (
-    <div className="flex h-full min-h-screen flex-col">
-      <main className="flex h-full bg-white">
-        <div className="h-full w-80 border-r bg-gray-50">
-          <Button to="new" className="block p-4 text-xl text-blue-500">
+    <div>
+      <main>
+        <div>
+          <Button to="new">
             + New Note
           </Button>
 
           <hr />
 
           {data.noteListItems.length === 0 ? (
-            <p className="p-4">No notes yet</p>
+            <p>No notes yet</p>
           ) : (
             <ol>
               {data.noteListItems.map((note) => (
                 <li key={note.id}>
                   <NavLink
-                    className={({ isActive }) =>
-                      `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
-                    }
+                    // className={({ isActive }) =>
+                    //   `block border-b p-4 text-xl ${isActive ? "bg-white" : ""}`
+                    // }
                     to={note.id}
                   >
                     📝 {note.title}

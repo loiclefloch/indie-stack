@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import { ReactNode, useState } from 'react';
 import { mainListItems, secondaryListItems } from './listItems';
 import ClientOnly from '~/utils/ClientOnly';
-import useStorageState from './useStorageState';
 
 const drawerWidth: number = 240;
 
@@ -85,7 +84,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
   // since we have aa sidebar specific for the admin pages, we hide by default the layout here
   const [open, setOpen] = useState(!isAdminPage);
 
-  const withDrawer = isLoggedIn
+  const withSidebar = isLoggedIn
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -93,7 +92,8 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="absolute" open={open} withDrawer={withDrawer}>
+      {/* Header */}
+      <AppBar position="absolute" open={open} withDrawer={withSidebar}>
         <Toolbar
           variant="dense"
           sx={{
@@ -123,7 +123,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
             <ClientOnly fallback="">{() => window.document?.title}</ClientOnly>
           </Typography>
 
-          <List>
+          <List dense sx={{ padding: 0 }}>
             {isLoggedIn && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }} href="/logout">
@@ -143,10 +143,11 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
         </Toolbar>
       </AppBar>
 
-      {withDrawer && (
+			{/* Sidebar menu */}
+      {withSidebar && (
         <Drawer variant="permanent" open={open}>
           <Toolbar
-          	variant="dense"
+            variant="dense"
             sx={{
               display: "flex",
               alignItems: "center",
@@ -170,10 +171,6 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
       <Box
         component="main"
         sx={{
-          backgroundColor: (theme) =>
-            theme.palette.mode === "light"
-              ? theme.palette.grey[100]
-              : theme.palette.grey[900],
           flexGrow: 1,
           height: "100vh",
           overflow: "auto",

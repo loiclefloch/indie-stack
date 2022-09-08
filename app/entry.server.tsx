@@ -8,26 +8,31 @@ import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import createEmotionCache from './src/createEmotionCache';
-import theme from './src/theme';
+import theme from './themes/toRemove';
 import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import { CacheProvider } from '@emotion/react';
 import createEmotionServer from '@emotion/server/create-instance';
+import { getUserTheme, themeCookie } from '~/utils/theme.server';
+import { getTheme } from '~/themes';
 
-const ABORT_DELAY = 5000;
+// const ABORT_DELAY = 5000;
 
-export default function handleRequest(
+export default async function handleRequest(
   request: Request,
   responseStatusCode: number,
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  const callbackName = isbot(request.headers.get("user-agent"))
-    ? "onAllReady"
-    : "onShellReady";
+  // const callbackName = isbot(request.headers.get("user-agent"))
+  //   ? "onAllReady"
+  //   : "onShellReady";
 
     const cache = createEmotionCache();
     const { extractCriticalToChunks } = createEmotionServer(cache);
+
+    const userTheme = await getUserTheme(request);
+    const theme = getTheme(userTheme);
   
     const MuiRemixServer = () => (
       <CacheProvider value={cache}>
@@ -60,6 +65,7 @@ export default function handleRequest(
     );
 
   responseHeaders.set('Content-Type', 'text/html');
+  responseHeaders.set("Set-Cookie", await themeCookie.serialize(userTheme));
 
   return new Response(`<!DOCTYPE html>${markup}`, {
     status: responseStatusCode,
