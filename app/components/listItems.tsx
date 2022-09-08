@@ -9,6 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import BarChartIcon from '@mui/icons-material/BarChart';
 import LayersIcon from '@mui/icons-material/Layers';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 
 export const mainListItems = (
   <React.Fragment>
@@ -42,6 +43,14 @@ export const mainListItems = (
       </ListItemIcon>
       <ListItemText primary="Integrations" />
     </ListItemButton>
+
+    <ListItemButton href="/admin">
+      <ListItemIcon>
+        <AdminPanelSettingsIcon />
+      </ListItemIcon>
+      <ListItemText primary="Admin" />
+    </ListItemButton>
+
   </React.Fragment>
 );
 

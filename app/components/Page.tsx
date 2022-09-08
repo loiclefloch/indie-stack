@@ -3,7 +3,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation } from 'react-router-dom';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -128,7 +127,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
               </ListItem>
             )}
 
-            {!isLoggedIn && location.pathname !== '/login' && (
+            {!isLoggedIn && location.pathname !== "/login" && (
               <ListItem disablePadding>
                 <ListItemButton sx={{ textAlign: "center" }} href="/login">
                   <ListItemText primary="Login" />
@@ -175,9 +174,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
         }}
       >
         <Toolbar />
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          {children}
-        </Container>
+        {children}
       </Box>
     </Box>
   );

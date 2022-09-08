@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper";
 import Chart from "~/components/Chart";
 import Deposits from "~/components/Deposits";
 import Orders from "~/components/Orders";
+import PageContainer from "~/components/PageContainer";
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request);
@@ -64,5 +65,5 @@ function DashboardContent() {
 }
 
 export default function Dashboard() {
-  return <DashboardContent />;
+  return <PageContainer><DashboardContent /></PageContainer>;
 }
