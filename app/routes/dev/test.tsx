@@ -9,14 +9,12 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import type { RootLoaderData } from "~/root";
+import { useRouteData } from "~/utils/routing";
 
 export default function Index() {
-	// Grabs theme from the loader that is in root.tsx
-	const { themeName } = useMatches()[0].data as RootLoaderData;
-	// Get location to provide redirect back url
-	const location = useLocation();
+	const { locales, themeName } = useRouteData<RootLoaderData>("root")
 
-	// console.log({ theme })
+	const location = useLocation();
 
 	return (
 		<Box
@@ -55,6 +53,10 @@ export default function Index() {
 				<MuiLink component={RmxLink} to="/test-private-route">
 					Test Root ErrorBoundary
 				</MuiLink>
+			</Box>
+
+			<Box sx={{ marginTop: 4 }}>
+				locales: {locales?.join(', ')}
 			</Box>
 		</Box>
 	);

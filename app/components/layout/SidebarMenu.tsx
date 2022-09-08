@@ -81,11 +81,17 @@ const BottomListItems = ({ openedMenu, handleToggle, dense }: MenuProps) => (
       icon={<ConstructionIcon />}
       dense={false}
     >
+       <MenuItem
+        name="Theme"
+        href="/dev/theme"
+        icon={<ConstructionIcon />}
+        dense={dense}
+      />
+
       <MenuItem
         name="Test Page"
-        href="/test"
+        href="/dev/test"
         icon={<ConstructionIcon />}
-        // sx={{ flex: 0 }}>
         dense={dense}
       />
     </SubMenu>

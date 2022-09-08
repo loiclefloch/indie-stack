@@ -10,6 +10,7 @@ import FormErrorHelperText from "~/components/form/FormErrorHelperText";
 import { Container, Box, Button, TextField, Paper } from "@mui/material";
 import { AuthenticityTokenInput } from "~/components/csrf";
 import { verifyAuthenticityToken } from "~/utils/csrf.server";
+import { logger } from '~/services/logger';
 
 export async function loader({ request }: LoaderArgs) {
   
@@ -22,13 +23,14 @@ export async function action({ request }: ActionArgs) {
   const session = await getSession(request);
   const formData = await request.formData();
 
-  console.log('onAction: ' + session.get('csrf'))
+  logger.info('onAction: ' + session.get('csrf'))
 
-  await verifyAuthenticityToken(formData, session);
+  // TODO:
+  // await verifyAuthenticityToken(formData, session);
 
   const email = formData.get("email");
   const password = formData.get("password");
-  const redirectTo = safeRedirect(formData.get("redirectTo"), "/notes");
+  const redirectTo = safeRedirect(formData.get("redirectTo"), "/dashboard");
   const remember = formData.get("remember");
 
 
@@ -79,7 +81,7 @@ export const meta: MetaFunction = () => {
 
 export default function LoginPage() {
   const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo") || "/notes";
+  const redirectTo = searchParams.get("redirectTo") || "/dashboard";
   const actionData = useActionData<typeof action>();
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
