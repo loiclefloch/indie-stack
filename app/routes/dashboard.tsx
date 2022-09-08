@@ -7,10 +7,12 @@ import { requireUser } from "~/session.server";
 
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import Chart from "~/components/Chart";
-import Deposits from "~/components/Deposits";
-import Orders from "~/components/Orders";
 import PageContainer from "~/components/PageContainer";
+import Chart from "~/components/dashboard/Chart";
+import Deposits from "~/components/dashboard/Deposits";
+import Orders from "~/components/dashboard/Orders";
+import Crash from "~/components/dashboard/Crash";
+import ErrorBoundary from "~/components/ErrorBoundary"
 
 export async function loader({ request }: LoaderArgs) {
   const user = await requireUser(request);
@@ -58,6 +60,15 @@ function DashboardContent() {
       <Grid item xs={12}>
         <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
           <Orders />
+        </Paper>
+      </Grid>
+
+      {/* Recent Orders */}
+      <Grid item xs={12}>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <ErrorBoundary>
+            <Crash />
+          </ErrorBoundary>
         </Paper>
       </Grid>
     </Grid>

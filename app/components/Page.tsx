@@ -17,6 +17,7 @@ import Typography from '@mui/material/Typography';
 import { ReactNode, useState } from 'react';
 import { mainListItems, secondaryListItems } from './listItems';
 import ClientOnly from '~/utils/ClientOnly';
+import useStorageState from './useStorageState';
 
 const drawerWidth: number = 240;
 
@@ -79,7 +80,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, children: ReactNode }) {
   const location = useLocation();
 
-  const [open, setOpen] = useState(true);
+  const isAdminPage = location.pathname.startsWith("/boadmin") || location.pathname.startsWith("/admin")
+
+  // since we have aa sidebar specific for the admin pages, we hide by default the layout here
+  const [open, setOpen] = useState(!isAdminPage);
 
   const withDrawer = isLoggedIn
 
@@ -91,6 +95,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
     <Box sx={{ display: "flex" }}>
       <AppBar position="absolute" open={open} withDrawer={withDrawer}>
         <Toolbar
+          variant="dense"
           sx={{
             pr: isLoggedIn ? 4 : 0, // keep right padding when drawer closed. 0 when logedout, no sidebar
           }}
@@ -141,6 +146,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
       {withDrawer && (
         <Drawer variant="permanent" open={open}>
           <Toolbar
+          	variant="dense"
             sx={{
               display: "flex",
               alignItems: "center",

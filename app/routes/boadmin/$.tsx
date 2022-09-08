@@ -2,16 +2,15 @@
 // https://marmelab.com/react-admin/Tutorial.html
 import type { LoaderArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Link } from "@remix-run/react";
 
 import { Admin, Resource  } from "react-admin";
-// import { ReactQueryDevtools } from "react-query/devtools";
 
 import boDataProvider from "~/utils/boDataProvider"
 
 import UsersList from "~/components/boadmin/UsersList"
 import UserEdit from "~/components/boadmin/UserEdit"
 import UserShow from "~/components/boadmin/UserShow"
+import BoAdminLayout from "~/components/boadmin/BoAdminLayout";
 
 export async function loader({ request }: LoaderArgs) {
   return json({});
@@ -23,7 +22,8 @@ export default function AdminPage() {
       <Admin
         basename="/boadmin"
         dataProvider={boDataProvider("/api")}
-        // layout={MyLayout}
+        layout={BoAdminLayout}
+        title="Admin 2"
       >
         <Resource
           name="users"
@@ -32,8 +32,6 @@ export default function AdminPage() {
           list={UsersList}
         />
       </Admin>
-
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
     </>
   );
 }
