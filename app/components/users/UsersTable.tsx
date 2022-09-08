@@ -8,6 +8,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Link } from '@remix-run/react';
 
 type Props = {
 	users: Array<User>
@@ -31,12 +32,16 @@ export default function UsersTable({ users }: Props) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <Link href={`/users/${user.id}`}>
+                <Link
+                  to={`/users/${user.id}`}
+                >
                   {user.id}
                 </Link>
               </TableCell>
               <TableCell>{user.email}</TableCell>
-              <TableCell>{user.firstName} {user.lastName}</TableCell>
+              <TableCell>
+                {user.firstName} {user.lastName}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

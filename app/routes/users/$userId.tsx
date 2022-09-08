@@ -1,7 +1,5 @@
 import * as React from "react";
-import type {
-  LoaderFunction, MetaFunction,
-} from "@remix-run/node";
+import type { MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { getUserById } from "~/services/user.server";
 import { useLoaderData } from "@remix-run/react";
@@ -9,7 +7,7 @@ import { Typography } from "@mui/material";
 import RouteDrawer, { RouteDrawerCatchBoundary } from "~/components/layout/RouteDrawer";
 import { notFound } from "~/utils/responses";
 
-export const loader: LoaderFunction = async ({ params }) => {
+export async function loader({ params }) {
   const userId = params.userId;
   if (!userId) throw notFound("User not found")
 
@@ -18,15 +16,15 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!user) throw notFound("User not found")
 
   return json({ user });
-};
+}
 
-export const meta: MetaFunction = ({ data }) => {
-  const { user } = data
+export function meta({ data }) {
+  const { user } = data;
 
   return {
     title: `${user?.email}`,
   };
-};
+}
 
 export default function User() {
   const { user } = useLoaderData<typeof loader>();
