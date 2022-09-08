@@ -1,8 +1,6 @@
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
@@ -12,11 +10,12 @@ import ListItemText from '@mui/material/ListItemText';
 import { styled } from '@mui/material/styles';
 import MuiToolbar, { ToolbarProps as MuiToolbarProps } from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { ReactNode, useState } from 'react';
+import { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
+import { DRAWER_WIDTH } from "~/constants";
+import { useSidebarState } from '~/hooks/useSidebarState';
 import ClientOnly from '~/utils/ClientOnly';
-import { bottomListItems, mainListItems, secondaryListItems } from './listItems';
-import { DRAWER_WIDTH } from "~/constants"
+import SidebarMenu from './SidebarMenu';
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -48,39 +47,13 @@ function Toolbar(props: MuiToolbarProps) {
   )
 }
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-  ({ theme, open }) => ({
-    '& .MuiDrawer-paper': {
-      position: 'relative',
-      whiteSpace: 'nowrap',
-      width: DRAWER_WIDTH,
-      transition: theme.transitions.create('width', {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      boxSizing: 'border-box',
-      ...(!open && {
-        overflowX: 'hidden',
-        transition: theme.transitions.create('width', {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.leavingScreen,
-        }),
-        width: theme.spacing(7),
-        [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
-        },
-      }),
-    },
-  }),
-);
-
 export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, children: ReactNode }) {
   const location = useLocation();
 
   const isAdminPage = location.pathname.startsWith("/boadmin") || location.pathname.startsWith("/admin")
 
   // since we have aa sidebar specific for the admin pages, we hide by default the layout here
-  const [open, setOpen] = useState(!isAdminPage);
+  const [open, setOpen] = useSidebarState(!isAdminPage);
 
   const withSidebar = isLoggedIn
 
@@ -145,33 +118,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
 
       {/* Sidebar menu */}
       {withSidebar && (
-        <Drawer variant="permanent" open={open}>
-          <Toolbar
-            variant="dense"
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "flex-end",
-              px: [1],
-            }}
-          >
-            <IconButton onClick={toggleDrawer}>
-              <ChevronLeftIcon />
-            </IconButton>
-          </Toolbar>
-
-          <Divider />
-          <List component="nav">
-            {mainListItems}
-            <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
-          </List>
-
-          <List component="nav" sx={{ display: "flex", flex: 1, flexDirection: 'column', justifyContent: 'flex-end'}}>
-              <Divider />
-              {bottomListItems}
-          </List>
-        </Drawer>
+        <SidebarMenu open={open} toggleDrawer={toggleDrawer} />
       )}
 
       <Box

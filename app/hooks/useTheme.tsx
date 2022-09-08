@@ -1,7 +1,7 @@
 import { getTheme, ThemeNames } from "~/themes";
 import { DEFAULT_THEME } from "~/constants";
 import { useContext, useMemo } from "react";
-import ClientStyleContext from "~/context/ClientStyleContext";
+import ClientStyleContext from "~/contexts/ClientStyleContext";
 
 export default function useTheme() {
 	const { themeName: propThemeName } = useContext(ClientStyleContext)

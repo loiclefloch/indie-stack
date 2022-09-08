@@ -18,7 +18,7 @@ import { ThemeProvider, withEmotionCache } from '@emotion/react';
 import Layout from '~/components/layout/Layout';
 import { getUserTheme, themeCookie } from './utils/theme.server';
 import { getTheme, ThemeNames } from './themes';
-import ClientStyleContext from "~/context/ClientStyleContext";
+import ClientStyleContext from "~/contexts/ClientStyleContext";
 import { DEFAULT_THEME } from './constants';
 import useEnhancedEffect from './hooks/useEnhancedEffect';
 import { CssBaseline, Typography, Link as MuiLink } from '@mui/material';
@@ -152,11 +152,18 @@ export default function App() {
   );
 }
 
+function parse(error) {
+  try {
+    return JSON.parse(error.message)
+  } catch (e) {}
+  return error
+}
+
 // https://remix.run/docs/en/v1/api/conventions#errorboundary
 export function ErrorBoundary({ error }: { error: Error }) {
-  const errorMessage = JSON.parse(error.message);
-
   console.error(error);
+
+  const errorMessage = parse(error) 
 
   return (
     <Document title="Error!" themeName={errorMessage.themeName}>
