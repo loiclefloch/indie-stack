@@ -131,12 +131,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 
 export default function SidebarMenu({ open: sidebarIsOpen, toggleDrawer }: Props) {
-	const [openedMenu, setOpenedMenu] = useState<MenuName>();
+	const [openedSubMenu, setOpenedSubMenu] = useState<MenuName>();
 
 	const dense = true
 
 	const handleToggle = (menu: MenuName) => {
-    setOpenedMenu(openedMenu => openedMenu === menu ? undefined : menu);
+    setOpenedSubMenu(openedMenu => openedMenu === menu ? undefined : menu);
   };
 
   return (
@@ -159,13 +159,13 @@ export default function SidebarMenu({ open: sidebarIsOpen, toggleDrawer }: Props
       <List component="nav">
         <MainListItems
           dense={dense}
-          openedMenu={openedMenu}
+          openedMenu={openedSubMenu}
           handleToggle={handleToggle}
         />
         <Divider sx={{ my: 1 }} />
         <SecondaryListItems
           dense={dense}
-          openedMenu={openedMenu}
+          openedMenu={openedSubMenu}
           handleToggle={handleToggle}
         />
       </List>
@@ -183,7 +183,7 @@ export default function SidebarMenu({ open: sidebarIsOpen, toggleDrawer }: Props
         <Divider />
         <BottomListItems
           dense={dense}
-          openedMenu={openedMenu}
+          openedMenu={openedSubMenu}
           handleToggle={handleToggle}
         />
       </List>

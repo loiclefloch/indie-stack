@@ -13,6 +13,7 @@ import { ReactNode } from 'react';
 import { useLocation } from 'react-router-dom';
 import { DRAWER_WIDTH } from "~/constants";
 import { useSidebarState } from '~/hooks/useSidebarState';
+import useIsClient from "~/hooks/useIsClient"
 import ClientOnly from '~/utils/ClientOnly';
 import SidebarMenu from './SidebarMenu';
 
@@ -48,15 +49,19 @@ function Toolbar(props: MuiToolbarProps) {
 
 export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, children: ReactNode }) {
   const location = useLocation();
+  const isClient = useIsClient()
 
-  const isAdminPage = location.pathname.startsWith("/boadmin") || location.pathname.startsWith("/admin")
+  const isAdminPage = location.pathname.startsWith("/boadmin") || location.pathname.startsWith("/admin");
 
-  // since we have aa sidebar specific for the admin pages, we hide by default the layout here
-  const [sidebarIsOpen, setSidebarOpen] = useSidebarState(!isAdminPage);
+  // since we have aa sidebar specific for the admin pages, we hide by default the layout here.
+  // TODO: sidebarIsOpen false on front because of local storage but true on server-side. 
+  // This results with the view being like the server-side (sidebar open) and not like it should be according to the local storage (sidebar closed).
+  // we trick with the useIsClient to force render on the front. But it makes a weird effect.
+  const [sidebarIsOpen2, setSidebarOpen] = useSidebarState(!isAdminPage);
 
-  console.log({ sidebarState: sidebarIsOpen })
+  const sidebarIsOpen = isClient ? sidebarIsOpen2 : true
 
-  const withSidebar = isLoggedIn
+  const withSidebar = isLoggedIn;
 
   const toggleDrawer = () => {
     setSidebarOpen(!sidebarIsOpen);
