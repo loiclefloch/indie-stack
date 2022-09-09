@@ -1,7 +1,6 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import MuiDrawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -53,18 +52,20 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
   const isAdminPage = location.pathname.startsWith("/boadmin") || location.pathname.startsWith("/admin")
 
   // since we have aa sidebar specific for the admin pages, we hide by default the layout here
-  const [open, setOpen] = useSidebarState(!isAdminPage);
+  const [sidebarIsOpen, setSidebarOpen] = useSidebarState(!isAdminPage);
+
+  console.log({ sidebarState: sidebarIsOpen })
 
   const withSidebar = isLoggedIn
 
   const toggleDrawer = () => {
-    setOpen(!open);
+    setSidebarOpen(!sidebarIsOpen);
   };
 
   return (
     <Box sx={{ display: "flex" }}>
       {/* Header */}
-      <AppBar position="absolute" open={open} withDrawer={withSidebar}>
+      <AppBar position="absolute" open={sidebarIsOpen} withDrawer={withSidebar}>
         <Toolbar
           variant="dense"
           sx={{
@@ -78,7 +79,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
             onClick={toggleDrawer}
             sx={{
               marginRight: "36px",
-              ...(open && { display: "none" }),
+              ...(sidebarIsOpen && { display: "none" }),
             }}
           >
             <MenuIcon />
@@ -118,7 +119,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
 
       {/* Sidebar menu */}
       {withSidebar && (
-        <SidebarMenu open={open} toggleDrawer={toggleDrawer} />
+        <SidebarMenu open={sidebarIsOpen} toggleDrawer={toggleDrawer} />
       )}
 
       <Box

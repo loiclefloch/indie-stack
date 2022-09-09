@@ -40,6 +40,7 @@ import type { Locales } from "./services/request.server";
 import { getClientLocales } from "./services/request.server";
 import { logger } from "~/services/logger";
 import { LoadingBar } from "~/components/layout/LoadingBar"
+import { StoreContextProvider, localStorageStore } from '~/modules/stores';
 
 export type RootLoaderData = {
   user: User | null;
@@ -199,13 +200,15 @@ const Document = withEmotionCache(
           />
         </head>
         <body>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+          <StoreContextProvider value={localStorageStore()}> 
+            <ThemeProvider theme={theme}>
+              <CssBaseline />
 
-            <LoadingBar isLoading={isLoading} />
+              <LoadingBar isLoading={isLoading} />
 
-            {children}
-          </ThemeProvider>
+              {children}
+            </ThemeProvider>
+          </StoreContextProvider>
           <ScrollRestoration />
           <Scripts />
           {process.env.NODE_ENV === "development" && <LiveReload />}
