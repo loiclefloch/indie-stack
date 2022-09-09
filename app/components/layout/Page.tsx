@@ -31,8 +31,8 @@ const AppBar = styled(MuiAppBar, {
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
-    marginLeft: withDrawer ? DRAWER_WIDTH : 0,
-    width: withDrawer ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+    marginLeft: withDrawer ? theme.sidebar.width : 0,
+    width: withDrawer ? `calc(100% - ${theme.sidebar.width }px)` : '100%',
     transition: theme.transitions.create(['width', 'margin'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -57,9 +57,9 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
   // TODO: sidebarIsOpen false on front because of local storage but true on server-side. 
   // This results with the view being like the server-side (sidebar open) and not like it should be according to the local storage (sidebar closed).
   // we trick with the useIsClient to force render on the front. But it makes a weird effect.
-  const [sidebarIsOpen2, setSidebarOpen] = useSidebarState(!isAdminPage);
+  // for the moment we render only on client side
+  const [sidebarIsOpen, setSidebarOpen] = useSidebarState(!isAdminPage);
 
-  const sidebarIsOpen = isClient ? sidebarIsOpen2 : true
 
   const withSidebar = isLoggedIn;
 
@@ -70,6 +70,7 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
   return (
     <Box sx={{ display: "flex" }}>
       {/* Header */}
+      {isClient && (
       <AppBar position="absolute" open={sidebarIsOpen} withDrawer={withSidebar}>
         <Toolbar
           variant="dense"
@@ -121,9 +122,10 @@ export default function Layout({ isLoggedIn, children }: { isLoggedIn: boolean, 
           </List>
         </Toolbar>
       </AppBar>
+)}
 
       {/* Sidebar menu */}
-      {withSidebar && (
+      {withSidebar && isClient && (
         <SidebarMenu open={sidebarIsOpen} toggleDrawer={toggleDrawer} />
       )}
 

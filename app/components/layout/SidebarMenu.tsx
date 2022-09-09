@@ -108,7 +108,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     '& .MuiDrawer-paper': {
       position: 'relative',
       whiteSpace: 'nowrap',
-      width: DRAWER_WIDTH,
+      width: theme.sidebar.width,
       transition: theme.transitions.create('width', {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.enteringScreen,
@@ -120,9 +120,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
           easing: theme.transitions.easing.sharp,
           duration: theme.transitions.duration.leavingScreen,
         }),
-        width: theme.spacing(7),
+        // width: theme.spacing(7),
+        width: theme.sidebar.closedWidth,
+
         [theme.breakpoints.up('sm')]: {
-          width: theme.spacing(9),
+          // width: theme.spacing(9),
+          width: theme.sidebar.closedWidth,
         },
       }),
     },
