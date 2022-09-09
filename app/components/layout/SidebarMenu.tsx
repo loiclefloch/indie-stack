@@ -177,6 +177,7 @@ export default function SidebarMenu({ open: sidebarIsOpen, toggleDrawer }: Props
           flex: 1,
           flexDirection: "column",
           justifyContent: "flex-end",
+          padding: 0,
         }}
       >
         <Divider />

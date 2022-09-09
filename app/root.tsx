@@ -1,5 +1,7 @@
 // based on https://github.com/mui/material-ui/blob/master/examples/remix-with-typescript/app/root.tsx
-import { useContext, useMemo } from "react";
+import { useContext, useMemo, useEffect } from "react";
+import nProgressStyles from "nprogress/nprogress.css";
+
 import {
   ActionFunction,
   LinksFunction,
@@ -16,6 +18,8 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useFetchers,
+  useTransition,
 } from "@remix-run/react";
 import { useLoaderData } from "@remix-run/react";
 import { commitSession, getSession, getUser } from "./services/session.server";
@@ -35,6 +39,7 @@ import { json } from "@remix-run/node";
 import type { Locales } from "./services/request.server";
 import { getClientLocales } from "./services/request.server";
 import { logger } from "~/services/logger";
+import { LoadingBar } from "~/components/layout/LoadingBar"
 
 export type RootLoaderData = {
   user: User | null;
@@ -87,7 +92,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 export const links: LinksFunction = () => {
-  return [];
+  return [{ rel: "stylesheet", href: nProgressStyles }];
 };
 
 export const meta: MetaFunction = () => ({
@@ -111,6 +116,29 @@ const Document = withEmotionCache(
     }: DocumentProps,
     emotionCache
   ) => {
+    const transition = useTransition();
+    const fetchers = useFetchers();
+
+    /**
+     * This gets the state of every fetcher active on the app and combine it with
+     * the state of the global transition (Link and Form), then use them to
+     * determine if the app is idle or if it's loading.
+     * Here we consider both loading and submitting as loading.
+     */
+    const loadingState = useMemo<"idle" | "loading">(
+      function getGlobalState() {
+        let states = [
+          transition.state,
+          ...fetchers.map((fetcher) => fetcher.state),
+        ];
+        if (states.every((state) => state === "idle")) return "idle";
+        return "loading";
+      },
+      [transition.state, fetchers]
+    );
+    // const isLoading = true
+    const isLoading = loadingState === "loading"
+
     const clientStyleData = useContext(ClientStyleContext);
 
     // not using useTheme yet, to use loaderData.
@@ -173,6 +201,9 @@ const Document = withEmotionCache(
         <body>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+
+            <LoadingBar isLoading={isLoading} />
+
             {children}
           </ThemeProvider>
           <ScrollRestoration />
