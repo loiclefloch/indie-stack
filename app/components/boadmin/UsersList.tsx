@@ -1,8 +1,9 @@
-import { Datagrid, DateField, EmailField, List, TextField } from 'react-admin';
+import { Datagrid, DateField, EmailField, TextField } from "react-admin";
+import ListLayout from '../admin/ListLayout';
 
 export default function UsersList() {
   return (
-    <List>
+    <ListLayout>
       <Datagrid rowClick="edit">
         {/* <TextField source="id" /> */}
         <EmailField source="email" />
@@ -11,6 +12,6 @@ export default function UsersList() {
         <DateField source="createdAt" />
         <DateField source="updatedAt" />
       </Datagrid>
-    </List>
-  )
+    </ListLayout>
+  );
 }

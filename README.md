@@ -1,12 +1,6 @@
 # Remix Indie Stack
 
-![The Remix Indie Stack](https://repository-images.githubusercontent.com/465928257/a241fa49-bd4d-485a-a2a5-5cb8e4ee0abf)
-
 Learn more about [Remix Stacks](https://remix.run/stacks).
-
-```
-npx create-remix --template remix-run/indie-stack
-```
 
 ## What's in the stack
 
@@ -28,9 +22,20 @@ Not a fan of bits of the stack? Fork it, change it, and use `npx create-remix --
 
 ## Quickstart
 
-Click this button to create a [Gitpod](https://gitpod.io) workspace with the project set up and Fly pre-installed
+Node version used: 16.17.0
 
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-Ready--to--Code-blue?logo=gitpod)](https://gitpod.io/from-referrer/)
+```
+sudo apt install sqlite3
+
+cp .env.example .env
+# edit .env file
+```
+
+```
+yarn install
+yarn setup
+```
+
 
 ## Development
 
